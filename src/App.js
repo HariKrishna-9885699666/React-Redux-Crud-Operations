@@ -5,7 +5,6 @@ import Navigationbar from "./components/elements/Navigationbar";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import AddPost from "./components/Posts/AddPost";
 import Post from "./components/Posts/Post";
-import UpdatePost from "./components/Posts/UpdatePost";
 import { Provider } from "react-redux";
 import store from "./store";
 import Loader from "./components/elements/Loader";

@@ -18,18 +18,6 @@ const AddPost = () => {
   const post = useSelector((state) => state.post.post);
   const loader = useSelector((state) => state.post.loader);
   const { id } = useParams();
-  // console.log("id", id);
-  // console.log("post", post);
-  // console.log("post", post?.title);
-
-  useEffect(() => {
-    if (onSubmit) {
-      const timer = setTimeout(() => {
-        history.push("/");
-      }, 100);
-      return () => clearTimeout(timer);
-    }
-  }, [onSubmit]);
 
   useEffect(() => {
     if (id) {
@@ -89,6 +77,7 @@ const AddPost = () => {
 
                   dispatch(values.id ? updatePost(post) : createPost(post));
                   ToastsStore.success("Post added successfully.");
+                  history.push("/");
                 }}
               >
                 {(props) => (
