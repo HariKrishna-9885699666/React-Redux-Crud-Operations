@@ -63,7 +63,7 @@ export const updatePost = (post) => async (dispatch) => {
 // Delete a post
 export const deletePost = (postId) => async (dispatch) => {
   setLoader(dispatch);
-  const result = await axios.delete(
+  await axios.delete(
     `https://jsonplaceholder.typicode.com/posts/${postId}`
   );
   dispatch({

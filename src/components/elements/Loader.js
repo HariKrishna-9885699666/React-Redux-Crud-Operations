@@ -9,7 +9,7 @@ const Loader = () => {
       {loader ? (
         <div className="loader-container">
           <div className="loader">
-            <img src={loaderImg}></img>
+            <img src={loaderImg} alt="loader"></img>
           </div>
         </div>
       ) : (

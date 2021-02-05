@@ -14,20 +14,15 @@ import { validateInput } from "../../validations/validations";
 const AddPost = () => {
   let history = useHistory();
   const dispatch = useDispatch();
-  const [onSubmit, setOnSubmit] = useState(false);
   const post = useSelector((state) => state.post.post);
   const loader = useSelector((state) => state.post.loader);
   const { id } = useParams();
 
   useEffect(() => {
     if (id) {
-      loadPost();
+      dispatch(getPost(id));
     }
   }, [id]);
-
-  const loadPost = () => {
-    dispatch(getPost(id));
-  };
 
   const [initialValues, setInitialValues] = useState({
     title: "",
@@ -66,7 +61,6 @@ const AddPost = () => {
                 }}
                 onSubmit={(values, actions) => {
                   actions.setSubmitting(false);
-                  setOnSubmit(true);
                   let post = {
                     title: values.title,
                     body: values.body,

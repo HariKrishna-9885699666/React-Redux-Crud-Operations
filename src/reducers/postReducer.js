@@ -33,13 +33,13 @@ export default (state = initialState, { type, payload }) => {
       return {
         ...state,
         posts: state.posts.map((postItem) =>
-          postItem.id == payload.id ? payload : postItem
+          postItem.id === payload.id ? payload : postItem
         ),
       };
     case DELETE_POST:
       return {
         ...state,
-        posts: state.posts.filter((postItem) => postItem.id != payload),
+        posts: state.posts.filter((postItem) => postItem.id !== payload),
       };
     case LOADING:
       return {
