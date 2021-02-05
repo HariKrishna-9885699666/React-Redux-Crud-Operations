@@ -1,6 +1,3 @@
-## Screenshot
-![Screenshot1](https://image.prntscr.com/image/sf6yQziIQbeyR-hAPqIzrA.png)
-
 ## Screenshot 1
 ![Screenshot1](https://image.prntscr.com/image/sf6yQziIQbeyR-hAPqIzrA.png)
 
