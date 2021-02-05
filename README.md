@@ -1,3 +1,5 @@
+<img src="https://react-redux-crud-operations.netlify.app/demo.gif" style="height: auto">
+
 ## Screenshot 1
 ![Screenshot1](https://image.prntscr.com/image/sf6yQziIQbeyR-hAPqIzrA.png)
 
