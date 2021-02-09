@@ -5,12 +5,14 @@ import {
   UPDATE_POST,
   DELETE_POST,
   LOADING,
+  HANDLE_ERROR,
 } from "../actions/types";
 
 const initialState = {
   posts: [],
   post: null,
   loader: false,
+  error: null,
 };
 export default (state = initialState, { type, payload }) => {
   switch (type) {
@@ -46,6 +48,12 @@ export default (state = initialState, { type, payload }) => {
         ...state,
         loader: !state.loader,
       };
+    case HANDLE_ERROR:
+      return {
+        ...state,
+        error: payload?.message,
+      };
+
     default:
       return state;
   }

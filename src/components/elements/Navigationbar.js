@@ -6,8 +6,8 @@ import { Navbar, Button, Badge } from "react-bootstrap";
 const Navigationbar = () => {
   return (
     <Navbar bg="light">
-      <Navbar.Brand href="#home">
-        <Link class="navbar-brand" to="/">
+      <Navbar.Brand>
+        <Link className="navbar-brand" to="/">
           <HouseFill />
         </Link>
       </Navbar.Brand>
@@ -16,6 +16,18 @@ const Navigationbar = () => {
       <h1>
         <Badge variant="primary">React Redux CRUD Operations</Badge>
       </h1>
+      <div className="ml-2">
+        <Badge variant="success">
+          Data Source:{" "}
+          <Link
+            to={{ pathname: "https://jsonplaceholder.typicode.com/" }}
+            target="_blank"
+          >
+            {"{JSON} Placeholder"}
+          </Link>
+        </Badge>
+      </div>
+
       <Navbar.Collapse className="justify-content-end">
         <Navbar.Text>
           <Link to="/addPost" className="btn">

@@ -3,26 +3,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
 import { Formik } from "formik";
-import {
-  ToastsContainer,
-  ToastsStore,
-  ToastsContainerPosition,
-} from "react-toasts";
+import { useToasts } from "react-toast-notifications";
 import { createPost, getPost, updatePost } from "../../actions/postAction";
 import { validateInput } from "../../validations/validations";
 
 const AddPost = () => {
   let history = useHistory();
   const dispatch = useDispatch();
-  const post = useSelector((state) => state.post.post);
-  const loader = useSelector((state) => state.post.loader);
+
+  const { post, error } = useSelector((state) => state.post);
   const { id } = useParams();
+  const { addToast } = useToasts();
 
   useEffect(() => {
     if (id) {
       dispatch(getPost(id));
     }
-  }, [id]);
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [initialValues, setInitialValues] = useState({
     title: "",
@@ -39,98 +36,109 @@ const AddPost = () => {
     }
   }, [id, post]);
 
+  useEffect(() => {
+    if (error) {
+      addToast(error, {
+        appearance: "error",
+        autoDismissTimeout: 3000,
+        autoDismiss: true,
+      });
+    }
+  }, [error]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <div className="container">
-      {!loader || (!loader && id) ? (
-        <div className="py-4">
-          <div className="card shadow">
-            <div className="card-header">Add A Post</div>
-            <div className="card-body">
-              <Formik
-                initialValues={initialValues}
-                validate={(values) => {
-                  const errors = {};
+      <div className="py-4">
+        <div className="card shadow">
+          <div className="card-header">Add A Post</div>
+          <div className="card-body">
+            <Formik
+              enableReinitialize
+              initialValues={initialValues}
+              validate={(values) => {
+                const errors = {};
 
-                  errors.title = validateInput(values.title) || null;
-                  errors.body = validateInput(values.body) || null;
+                errors.title = validateInput(values.title) || null;
+                errors.body = validateInput(values.body) || null;
 
-                  for (var key in errors) {
-                    if (errors[key] !== null) return errors;
+                for (var key in errors) {
+                  if (errors[key] !== null) return errors;
+                }
+                return true;
+              }}
+              onSubmit={(values, actions) => {
+                actions.setSubmitting(false);
+                let post = {
+                  title: values.title,
+                  body: values.body,
+                };
+                if (values.id) {
+                  post.id = values.id;
+                }
+
+                dispatch(values.id ? updatePost(post) : createPost(post));
+
+                addToast(
+                  `Post ${values.id ? "updated" : "added"} successfully`,
+                  {
+                    appearance: "success",
+                    autoDismissTimeout: 3000,
+                    autoDismiss: true,
                   }
-                  return true;
-                }}
-                onSubmit={(values, actions) => {
-                  actions.setSubmitting(false);
-                  let post = {
-                    title: values.title,
-                    body: values.body,
-                  };
-                  if (values.id) {
-                    post.id = values.id;
-                  }
+                );
+                history.push("/");
+              }}
+            >
+              {(props) => (
+                <Form onSubmit={props.handleSubmit}>
+                  <Form.Group controlId="formBasicEmail">
+                    <Form.Label>
+                      Title <span className="text-danger">*</span>
+                    </Form.Label>
+                    <span className="errorMsg">
+                      {props.errors.title &&
+                        props.touched.title &&
+                        props.errors.title}
+                    </span>
+                    <Form.Control
+                      name="title"
+                      type="text"
+                      placeholder="Enter Post Title"
+                      value={props.values.title}
+                      onChange={props.handleChange}
+                      onBlur={props.handleBlur}
+                    />
+                  </Form.Group>
 
-                  dispatch(values.id ? updatePost(post) : createPost(post));
-                  ToastsStore.success("Post added successfully.");
-                  history.push("/");
-                }}
-              >
-                {(props) => (
-                  <Form onSubmit={props.handleSubmit}>
-                    <Form.Group controlId="formBasicEmail">
-                      <Form.Label>
-                        Title <span className="text-danger">*</span>
-                      </Form.Label>
-                      <span className="errorMsg">
-                        {props.errors.title &&
-                          props.touched.title &&
-                          props.errors.title}
-                      </span>
-                      <Form.Control
-                        name="title"
-                        type="text"
-                        placeholder="Enter Post Title"
-                        value={props.values.title}
-                        onChange={props.handleChange}
-                        onBlur={props.handleBlur}
-                      />
-                    </Form.Group>
+                  <Form.Group controlId="formBasicPassword">
+                    <Form.Label>
+                      Body <span className="text-danger">*</span>
+                    </Form.Label>
+                    <span className="errorMsg">
+                      {props.errors.body &&
+                        props.touched.body &&
+                        props.errors.body}
+                    </span>
+                    <Form.Control
+                      name="body"
+                      as="textarea"
+                      rows={3}
+                      placeholder="Enter Post Body Text"
+                      value={props.values.body}
+                      onChange={props.handleChange}
+                      onBlur={props.handleBlur}
+                    />
+                  </Form.Group>
 
-                    <Form.Group controlId="formBasicPassword">
-                      <Form.Label>
-                        Body <span className="text-danger">*</span>
-                      </Form.Label>
-                      <span className="errorMsg">
-                        {props.errors.body &&
-                          props.touched.body &&
-                          props.errors.body}
-                      </span>
-                      <Form.Control
-                        name="body"
-                        as="textarea"
-                        rows={3}
-                        placeholder="Enter Post Body Text"
-                        value={props.values.body}
-                        onChange={props.handleChange}
-                        onBlur={props.handleBlur}
-                      />
-                    </Form.Group>
-
-                    <Button variant="primary" type="submit">
-                      {id ? "Update" : "Add New"} Post
-                    </Button>
-                  </Form>
-                )}
-              </Formik>
-              <ToastsContainer
-                store={ToastsStore}
-                position={ToastsContainerPosition.TOP_RIGHT}
-              />
-            </div>
+                  <Button variant="primary" type="submit">
+                    {id ? "Update" : "Add New"} Post
+                  </Button>
+                </Form>
+              )}
+            </Formik>
           </div>
         </div>
-      ) : (
-        ""
-      )}
+      </div>
     </div>
   );
 };

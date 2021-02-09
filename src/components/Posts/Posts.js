@@ -6,15 +6,17 @@ import { getPosts } from "../../actions/postAction";
 import { Table } from "react-bootstrap";
 import { PencilSquare, Trash } from "react-bootstrap-icons";
 import SweetAlert from "react-bootstrap-sweetalert";
+import { useToasts } from "react-toast-notifications";
 
 const Posts = () => {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.post.posts);
   const [postId, setPostId] = useState(null);
+  const { addToast } = useToasts();
 
   useEffect(() => {
     dispatch(getPosts());
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="row">
@@ -67,6 +69,11 @@ const Posts = () => {
           onConfirm={() => {
             dispatch(deletePost(postId));
             setPostId(null);
+            addToast(`Post deleted successfully`, {
+              appearance: "success",
+              autoDismissTimeout: 3000,
+              autoDismiss: true,
+            });
           }}
           onCancel={() => {
             setPostId(null);
