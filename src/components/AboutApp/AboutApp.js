@@ -153,6 +153,18 @@ function AboutApp() {
                         <ListItemText primary="Portfolio" />
                       </a>
                     </ListItem>
+                    <ListItem button>
+                      <ListItemIcon>
+                        <LinkIcon />
+                      </ListItemIcon>
+                      <a
+                        href="https://harikrishna.hashnode.dev"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <ListItemText primary="Blog" />
+                      </a>
+                    </ListItem>
                   </List>
                 </Typography>
               </ExpansionPanelDetails>
